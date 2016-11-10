@@ -20,7 +20,7 @@
         },
 
         DEVELOPMENT: {
-          URL: 'https://frozen-tundra-93174.herokuapp.com'
+          URL: 'http://localhost:9000'
         }
       },
 
