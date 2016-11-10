@@ -16,20 +16,31 @@
      * @param form
      */
     SignUp.register = function (form) {
-      SignUp.submitted = true;
-
+      
       if (form.$valid) {
-        Auth.createUser(SignUp.user)
-          .then(function () {
-            // Account created, redirect to home
-            $state.go('home');
-          })
-          .catch(function (err) {
-            err = err.data;
-            $scope.errors = {};
-
-          });
+        
+        $scope.loading = true; // change to "processing"
+        
+        // submit
+        Auth.signup(SignUp.user.name, SignUp.user.company, SignUp.user.email, SignUp.user.password)
+        
+        // success
+        $scope.$on('signup-success', function(event, data){
+          $scope.loading = false;
+          $scope.error = false;
+          $scope.success = true;
+          $scope.$apply();
+        });
+        
+        // error
+        $scope.$on('signup-error', function(event, data){
+          $scope.loading = false;
+          $scope.error = data.message;
+          $scope.$apply();
+        });
+        
       }
+      
     };
 
   }

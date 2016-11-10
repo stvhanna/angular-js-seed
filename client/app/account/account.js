@@ -36,8 +36,8 @@ angular.module('angularJsSeedApp')
         url: '/changepassword',
         templateUrl: 'app/account/changePassword/changePassword.html',
         controller: 'ChangePasswordCtrl',
-        controllerAs: 'ChangePassword',
-        authenticate: true
+        controllerAs: 'ChangePassword'//,
+        //authenticate: true
       });
   })
   .run(function($rootScope) {

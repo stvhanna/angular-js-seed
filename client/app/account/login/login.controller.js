@@ -2,35 +2,50 @@
 
 (function (angular) {
 
-function loginCtrl($scope, Auth, $state, $window) {
+function loginCtrl($scope, Auth, $state, $window, $rootScope, $timeout) {
 
   /**
    * controller variables
    */
     var Login = this;
-    Login.user = {};
-    Login.errors = {};
-
+  
   /**
    *Login user
    * @param form
    */
     Login.login = function(form) {
-      Login.submitted = true;
-
+      
+      console.log('logging in');
+      
+      $scope.loading = true;
+      
+      // valid form
       if (form.$valid) {
-        Auth.login({
-          email: Login.user.email,
-          password: Login.user.password
-        })
-        .then(function() {
-          // Logged in, redirect to home
-          $state.go('home');
-        })
-        .catch(function(error) {
-            Login.errors.other = error.message;
+        
+        // submit
+        Auth.login(Login.user.email, Login.user.password);
+        
+        // hide loading
+        $scope.$on('hide-loading', function(){
+          $scope.loading = false;
+          $scope.$apply();
         });
+        
+        // on success
+        $scope.$on('login-success', function(){
+          console.log('go to projects');
+          $state.go('projects');
+        });
+        
+        // show error
+        $scope.$on('login-error', function(event, data){
+          $scope.error = data.message;
+          $scope.$apply();
+        });
+        
+        
       }
+        
     };
 
   }

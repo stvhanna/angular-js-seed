@@ -59,8 +59,7 @@ module.exports = function (grunt) {
           '<%= yeoman.client %>/{app,components}/**/*.js',
           '!<%= yeoman.client %>/{app,components}/**/*.spec.js',
           '!<%= yeoman.client %>/{app,components}/**/*.mock.js',
-          '!<%= yeoman.client %>/app/app.js',
-          '!<%= yeoman.client %>/components/cognito/*.js'],
+          '!<%= yeoman.client %>/app/app.js'],
         tasks: ['injector:scripts']
       },
       injectCss: {
@@ -492,7 +491,6 @@ module.exports = function (grunt) {
                  '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.js',
 
                  '!{.tmp,<%= yeoman.client %>}/app/app.js',
-                 '!{.tmp,<%= yeoman.client %>}/components/cognito/*.js',
                  '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.spec.js',
                  '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.mock.js'
                ]
