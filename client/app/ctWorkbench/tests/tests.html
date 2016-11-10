@@ -1,0 +1,97 @@
+<nav class="navbar navbar-default" ng-controller="HeaderCtrl">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="" ui-sref="projects">
+        <img class="img-responsive img-logo" src="../../assets/images/it2-logo.svg" />
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      
+      <!-- nav -->
+      <div class="breadcrumb-nav nav navbar-nav">
+        <span ui-sref="projects({project: context.project.id})">Projects</span>
+        <i class="breadcrumb-next fa fa-chevron-right"></i>
+        <span class="active" ui-sref="tests({project: context.project.id, test: activeTest})">Tests</span>
+      </div>
+
+      <ul class="nav navbar-nav navbar-right">
+        <!--
+        <li><a href="#submit"><i class='fa fa-plus-circle'></i> Submit Project</a></li>
+        <li><a href="#singleIVanalysis" class="go-to-singleIvAnalysis" data-toggle="tab">Single IV Analysis</a></li>
+        -->
+        <li class="dropdown" uib-dropdown on-toggle="toggled(open)">
+          <a href="" uib-dropdown-toggle>Account <span class="caret"></span></a>
+          <ul uib-dropdown-menu>
+            <!--
+            <li><a href="#settings" class="go-to-settings" data-toggle="tab">Settings</a></li>
+            <li role="separator" class="divider"></li>
+            -->
+            <li><a href=""><i class="fa fa-user"></i> {{userName}}</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="" ng-click="logout();">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+ <div class="container-fluid tests hide" ng-class="{'show':tests}">
+  
+  <div class="header header-tests">
+    <h4>{{context.project.description}}</h4>
+    <h5>Package: {{context.project.packageType}} | Stress: {{context.project.stressType}}</h5>
+  </div>
+
+  <table class="table table-bordered table-hover table-condensed">
+    <thead>
+      <tr>
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.file}}" tooltip-append-to-body="true">File</td>
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.minStress}}" tooltip-append-to-body="true">Min Stress (V)</td>
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.maxStress}}" tooltip-append-to-body="true">Max Stress (V)</td>
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.pass}}" tooltip-append-to-body="true">Pass</td>
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.fail}}" tooltip-append-to-body="true">Fail</td>
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.caution}}" tooltip-append-to-body="true">Caution</td>
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.flag}}" tooltip-append-to-body="true">Flag</td>
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.comment}}" tooltip-append-to-body="true">Comment</td>
+      </tr>
+    </thead>
+    <tr ng-class="{'test-active': activeTest == test.id}" ng-repeat="test in tests" ui-sref="results({test: test.id, unit: 0})">
+      <td>
+        <span>{{ test.description }}</span>
+      </td>
+      <td>
+        <span>{{ test.MinStressLevel }}</span>
+      </td>
+      <td>
+        <span>{{ test.MaxStressLevel }}</span>
+      </td>
+      <td>
+        <span>{{ test.PassCount }}</span>
+      </td>
+      <td>
+        <span>{{ test.FailCount }}</span>
+      </td>
+      <td>
+        <span>{{ test.CautionCount }}</span>
+      </td>
+      <td>
+        <span>{{ test.FlaggedCount }}</span>
+      </td>
+      <td>
+        <span>{{ test.comment }}</span>
+      </td>
+
+    </tr>
+  </table>
+</div>

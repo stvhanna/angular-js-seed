@@ -1,0 +1,180 @@
+<header></header>
+
+<!-- single iv analysis -->
+<div class="col-md-12 tab-pane signleIvAnalysis" id="singleIVanalysis" ng-controller="EditableTableCtrl">
+  <!-- tabular data -->
+  <div class="tabular-data col-sm-12 col-md-6 col-lg-6">
+    <div class="row top">
+      <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+        <h4 class="text-center col-sm-offset-4">Test Criteria</h4>
+
+        <div class="form-group">
+          <label for="minShift" class="col-sm-4 control-label failure-threshold-label">Failure Threshold</label>
+          <div class="col-sm-8">
+            <div class="input-group failure-threshold min">
+              <div class="input-group-addon">Min</div>
+              <input class="form-control" id="minShift" ng-model="minpercent" ng-value="{{ minpercent }}" step="any" type="number" required />
+              <div class="input-group-addon">%</div>
+            </div>
+            <div class="input-group failure-threshold">
+              <div class="input-group-addon">Max</div>
+              <input class="form-control" id="maxShift" ng-model="percent" ng-value="{{ percent }}" step="any" type="number" required>
+              <div class="input-group-addon">%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix margin-top"></div>
+
+        <div class="form-group">
+          <label for="noiseFloor" class="col-sm-4 control-label">Noise Floor</label>
+          <div class="col-sm-8">
+            <div class="noise-floor-selector" ng-class="{'compact': noiseFloorDetermination == 'manual'}">
+              <select class="form-control" id="noiseFloor" ng-model="noiseFloorDetermination" required>
+                <option value="automatic" ng-selected="{{ noiseFloorDetermination == 'automatic' }}" selected>Automatic</option>
+                <option value="manual" ng-selected="{{ noiseFloorDetermination == 'manual' }}">Manual</option>
+              </select>
+            </div>
+            <div class="input-group noise-floor-value hidden" ng-class="{'show-input': noiseFloorDetermination == 'manual'}">
+              <input type="text" class="form-control" id="noiseFloor" ng-model="noiseFloor" ng-value="{{ noiseFloor }}" step="any" type="number" placeholder="e.g. 50e-9" required>
+              <div class="input-group-addon">A</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-center">
+        <div class="clearfix margin-top"></div>
+        <div class="clearfix margin-top"></div>
+        <div class="clearfix margin-top"></div>
+        <button class="btn btn-primary btn-block" ng-click="save()" type="submit">Analyze</button>
+        <div class="clearfix margin-top"></div>
+        <span class="btn btn-xs btn-danger" ng-click="clearAll()">Clear All Data</span>
+      </div>
+
+    </div>
+    <div class="clearfix margin-top"></div>
+    <form>
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        <!-- pre stress -->
+        <h4 class="text-center">Pre Stress</h4>
+        <table class="table table-bordered table-hover table-condensed">
+          <thead>
+            <tr>
+              <td class="text-center table-head">Volts (V)
+                <br/>
+                <span class="btn btn-xs btn-default margin-top" ng-click="clearPreVolt()">clear</span>
+              </td>
+              <td class="text-center table-head">Current (A)
+                <br/>
+                <span class="btn btn-xs btn-default margin-top" ng-click="clearPreCurrent()">clear</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-center table-head" colspan="2">
+                <textarea class="form-control" ng-model="preParse" ng-value="{{ preParse }}"></textarea>
+                <span class="btn btn-xs btn-default margin-top" ng-click="runPreParser()">Parse Data</span>
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in pre">
+              <td>
+                <input class="form-control" ng-model="item.volt" ng-value="{{ item.volt }}" step="any" type="number">
+              </td>
+              <td>
+                <input class="form-control" ng-model="item.current" ng-value="{{ item.current }}" step="any" type="number">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div><!-- post stress -->
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        <h4 class="text-center">Post Stress</h4>
+        <table class="table table-bordered table-hover table-condensed">
+          <thead>
+            <tr>
+              <td class="text-center table-head">Volts (V)
+                <br/>
+                <span class="btn btn-xs btn-default margin-top" ng-click="clearPostVolt()">clear</span></td>
+              <td class="text-center table-head">Current (A)
+                <br/>
+                <span class= "btn btn-xs btn-default margin-top" ng-click="clearPostCurrent()">clear</span></td>
+            </tr>
+            <tr>
+              <td class="text-center table-head" colspan="2">
+                <textarea class="form-control" ng-model="postParse" ng-value= "{{ postParse }}"></textarea>
+                <span class="btn btn-xs btn-default margin-top" ng-click="runPostParser()">Parse Data</span>
+              </td>
+            </tr>
+          </thead>
+          <tr ng-repeat="item in post">
+            <td>
+              <input class="form-control" ng-model="item.volt" ng-value="{{ item.volt }}" step="any" type="number">
+            </td>
+            <td>
+              <input class="form-control" ng-model="item.current" ng-value="{{ item.current }}" step="any" type="number">
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="center col-md-12">
+        <button class="btn btn-success" ng-click="addRow()" type="button">Add Row</button>
+      </div>
+
+      <div class="clearfix margin-top"></div>
+
+    </form>
+  </div>
+
+  <!-- single iv analysis results -->
+  <div class="results col-sm-6 col-md-6 col-lg-6 pull-right hidden" ng-class="{'show': returnData}">
+    <!-- chart -->
+    <div id="chartSpace"></div>
+    <!-- results -->
+    <div class="result-data" ng-if="results">
+
+      <p>
+        <b>Result:</b>
+        <span class="result-status {{ results.curveStatus }}">{{ results.curveStatus }}</span> <span class="result-status {{ results.curveStatus }}" ng-if="results.curveStatus != 'Pass'">- {{ results.curveDescription }}</span>
+      </p>
+
+      <p>
+        <b>Noise Floor:</b>
+        <span class="gray">{{ results.maxTolerance }} A</span>
+      </p>
+    </div>
+
+    <!-- computed data -->
+    <table class="table table-bordered table-condensed" ng-if="returnData">
+      <thead>
+        <tr>
+          <td class="text-center table-head">Volts (V)</td>
+          <td class="text-center table-head">Pre Stress - Current (A)</td>
+          <td class="text-center table-head">Post Stress - Current (A)</td>
+          <td class="text-center table-head hidden">Shift %</td>
+          <td class="text-center table-head hidden">Status</td>
+        </tr>
+      </thead>
+      <tr ng-repeat="item in returnData">
+        <td>
+          <span ng-model="item.volt">{{ item.volt | round2dp }}</span>
+        </td>
+        <td>
+          <span class="{{ item.preAmpClass }}" ng-model="item.preCurrent">{{ item.preCurrent | exp }}</span>
+        </td>
+        <td>
+          <span class="{{ item.postAmpClass }}" ng-model="item.postCurrent">{{ item.postCurrent | exp }}</span>
+        </td>
+        <td class="hidden">
+          <span class="{{ item.shiftPercentClass }}" ng-model="item.shiftPercent">{{ item.shiftPercent }}</span>
+        </td>
+        <td class="hidden">
+          <span class="yellow {{ item.status }}" ng-model="item.status">{{ item.status }}</span>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div><!-- /div.single-iv-analysis -->

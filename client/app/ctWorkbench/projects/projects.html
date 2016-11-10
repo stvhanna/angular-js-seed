@@ -1,0 +1,136 @@
+<nav class="navbar navbar-default" ng-controller="HeaderCtrl">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="" ui-sref="projects">
+        <img class="img-responsive img-logo" src="../../assets/images/it2-logo.svg" />
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      
+      <!-- nav -->
+      <div class="breadcrumb-nav nav navbar-nav">
+        <span class="active" ui-sref="projects({project: context.project.id})">Projects</span>
+      </div>
+
+      <ul class="nav navbar-nav navbar-right">
+        <!--
+        <li><a href="#submit"><i class='fa fa-plus-circle'></i> Submit Project</a></li>
+        <li><a href="#singleIVanalysis" class="go-to-singleIvAnalysis" data-toggle="tab">Single IV Analysis</a></li>
+        -->
+        <li class="dropdown" uib-dropdown on-toggle="toggled(open)">
+          <a href="" uib-dropdown-toggle>Account <span class="caret"></span></a>
+          <ul uib-dropdown-menu>
+            <!--
+            <li><a href="#settings" class="go-to-settings" data-toggle="tab">Settings</a></li>
+            <li role="separator" class="divider"></li>
+            -->
+            <li><a href=""><i class="fa fa-user"></i> {{userName}}</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="" ng-click="logout();">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<!-- projects -->
+<div class="projects hide" ng-class="{'show': projects}">
+  
+  <table class="table table-bordered table-hover table-condensed">
+    <thead>
+      <tr>
+
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.icDeviceName}}" tooltip-append-to-body="true">IC / Device Name</td>
+
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.project}}" tooltip-append-to-body="true">Project</td>
+
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.date}}" tooltip-append-to-body="true">Date</td>
+
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.packageType}}" tooltip-append-to-body="true">Package Type</td>
+
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.stressType}}" tooltip-append-to-body="true">Stress Type</td>
+
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.technology}}" tooltip-append-to-body="true">Technology</td>
+
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip-html="'{{failureShiftPercentageImage}}'" tooltip-append-to-body="true">Min Failure Threshold Shift (%)</td>
+
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip-html="'{{failureShiftPercentageImage}}'" tooltip-append-to-body="true">Max Failure Threshold Shift (%)</td>
+
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.noiseFloor}}" tooltip-append-to-body="true">Noise Floor (A)</td>
+
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.pass}}" tooltip-append-to-body="true">Pass</td>
+
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.fail}}" tooltip-append-to-body="true">Fail</td>
+
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.caution}}" tooltip-append-to-body="true">Caution</td>
+
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.flag}}" tooltip-append-to-body="true">Flag</td>
+
+        <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.notes}}" tooltip-append-to-body="true">Notes</td>
+
+      </tr>
+    </thead>
+    <tr class="a-project" ng-class="{'project-active': activeProject == project.id}" ng-repeat="project in projects | orderBy:'description'" ui-sref="tests({project: project.id})">
+      <td>
+        <span ng-if="project.deviceName == null">-</span>
+        <span ng-if="project.deviceName != null">{{ project.deviceName }}</span>
+      </td>
+      <td>
+        <span ng-if="project.description == null">-</span>
+        <span  ng-if="project.description != null">{{ project.description }}</span>
+      </td>
+      <td>
+        <span>{{ project.datecreated | amUtc | amLocal | amDateFormat:'MM/DD/YYYY h:mm a' }}</span>
+      </td>
+      <td>
+        <span ng-if="project.packageType == null">-</span>
+        <span ng-if="project.packageType != null">{{ project.packageType }}</span>
+      </td>
+      <td>
+        <span ng-if="project.stressType == null">-</span>
+        <span  ng-if="project.stressType != null">{{ project.stressType }}</span>
+      </td>
+      <td>
+        <span ng-if="project.technology == null">-</span>
+        <span  ng-if="project.technology != null">{{ project.technology }}</span>
+      </td>
+      <td>
+        <span>{{ project.MinShiftPercentage | num }}%</span>
+      </td>
+      <td>
+        <span>{{ project.MaxShiftPercentage | num }}%</span>
+      </td>
+      <td>
+        <span ng-if="project.MaxTolerance == null">Automatically Calculated</span>
+        <span ng-if="project.MaxTolerance != null">{{ project.MaxTolerance | num }} A</span>
+      </td>
+      <td>
+        <span>{{ project.PassCount }}</span>
+      </td>
+      <td>
+        <span>{{ project.FailCount }}</span>
+      </td>
+      <td>
+        <span>{{ project.CautionCount }}</span>
+      </td>
+      <td>
+        <span>{{ project.FlaggedCount }}</span>
+      </td>
+      <td>
+        <span ng-if="project.notes == null">-</span>
+        <span  ng-if="project.notes != null">{{ project.notes }}</span>
+      </td>
+    </tr>
+  </table>
+
+</div>

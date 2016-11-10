@@ -1,0 +1,159 @@
+<nav class="navbar navbar-default" ng-controller="HeaderCtrl">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="" ui-sref="projects">
+        <img class="img-responsive img-logo" src="../../assets/images/it2-logo.svg" />
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      
+      <!-- nav -->
+      <div class="breadcrumb-nav nav navbar-nav">
+        <span ui-sref="projects({project: context.project.id})">Projects</span> 
+        <i class="breadcrumb-next fa fa-chevron-right"></i>
+        <span ui-sref="tests({project: context.project.id, test: context.test.id})">Tests</span>
+        <i class="breadcrumb-next fa fa-chevron-right"></i>
+        <span ui-sref="results({test: context.test.id, unit: 0, pin: context.pin.pin, voltage: context.stressLevel.description.replace('V','')})">Results</span>
+        <i class="breadcrumb-next fa fa-chevron-right"></i>
+        <span class="active" ui-sref="details({test: context.test.id, unit: 0, pin: context.pin.pin, voltage: context.stressLevel.description.replace('V','')})">Details</span>
+      </div>
+
+      <ul class="nav navbar-nav navbar-right">
+        <!--
+        <li><a href="#submit"><i class='fa fa-plus-circle'></i> Submit Project</a></li>
+        <li><a href="#singleIVanalysis" class="go-to-singleIvAnalysis" data-toggle="tab">Single IV Analysis</a></li>
+        -->
+        <li class="dropdown" uib-dropdown on-toggle="toggled(open)">
+          <a href="" uib-dropdown-toggle>Account <span class="caret"></span></a>
+          <ul uib-dropdown-menu>
+            <!--
+            <li><a href="#settings" class="go-to-settings" data-toggle="tab">Settings</a></li>
+            <li role="separator" class="divider"></li>
+            -->
+            <li><a href=""><i class="fa fa-user"></i> {{userName}}</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="" ng-click="logout();">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container-fluid details">
+  
+  <div class="header header-methods col-md-3">
+    <h4>{{context.project.description}}</h4>
+    <h5>Package: {{context.project.packageType}} | Stress: {{context.project.stressType}}</h5>
+  </div>
+
+  <div class="header header-methods col-md-9 hidden">
+    <h3>Pin {{context.pin.pin}} <span ng-if="context.pin.description">({{context.pin.description}})</span> @ {{context.stressLevel.description}} on Sample {{sample}} - {{details.description}}</h3>
+  </div>
+
+  <div class="clearfix"></div>
+
+  <!-- methods navigation -->
+  <div class="scrollbar-wrap">
+  <div class="col-md-2 methods-nav scrollbar">
+    <div class="method-item method" ng-repeat="method in methods | toArray | orderBy:'socket'"  ui-sref="details({test: test, unit: method.socket, pin: pin, voltage: voltage, method: method.id})" ng-class="{'method-active': method.id == methodId}">
+
+      <p class="method-description result-status-block {{method.curveStatus}}">{{method.description}}</p>
+
+      <div class="padding-10">
+
+        <p class="method-noise-floor"><b>Noise Floor:</b> {{method.maxTolerance | exp }} A</p>
+
+        <p class="method-curve-status"><b>Result:</b> 
+          <span class="result-status {{method.curveStatus}}">{{method.curveStatus}} <span ng-if="method.curveStatus != 'Pass'">- {{method.curveStatusDescription | removeIdentifier}}</span>
+          </span>
+        </p>
+
+        <p class="method-sample"><b>Sample:</b> {{method.socket}}</p>
+
+        <p class="method-time hidden"><b>Time:</b> {{method.preTimeRan}} - {{method.postTimeRan}}</p>
+
+      </div>
+
+    </div>
+  </div>
+  <div class="cover-bar"></div>
+  </div>
+
+  <!-- chart -->
+  <div class="col-md-6">
+    
+    <!-- id has to be unique -->
+    <div zingchart id="chart-{{test}}-{{pin}}-{{methodId}}-{{random}}" class="chart" zc-json="chartConfig" zc-height="500" zc-width="600"></div>
+    
+    <div class="clearfix"></div>
+
+    <!-- summary -->
+    <div class="summary">
+      <p class="method-description"><b>Method:</b> {{details.description}}</p>
+
+      <p class="method-curve-status"><b>Result:</b> 
+        <span class="result-status {{details.curveStatus}}">{{details.curveStatus}} <span ng-if="details.curveStatus != 'Pass'">- {{details.curveStatusDescription | removeIdentifier}}</span>
+        </span>
+      </p>
+
+      <p class="method-time hidden"><b>Time:</b> {{details.preTimeRan}} - {{details.postTimeRan}}</p>
+    </div><!-- /div.summary -->
+  </div>
+
+  <!-- raw data -->
+  <div class="scrollbar-wrap">
+  <div class="raw-data col-md-4 scrollbar">
+    <div class="col-md-6">
+      <h4 class="center">Pre-Stress Data</h4>
+      <table class="table table-bordered table-hover table-condensed">
+        <thead>
+          <tr>
+            <td class="text-center table-head">Volts (V)</td>
+            <td class="text-center table-head">Current (A)</td>
+          </tr>
+        </thead>
+        <tr ng-repeat="pre in preData">
+          <td>
+            <span>{{ pre.volt | round2dp }}</span>
+          </td>
+          <td>
+            <span>{{ pre.current | exp }}</span>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="col-md-6">
+      <h4 class="center">Post-Stress Data</h4>
+      <table class="table table-bordered table-hover table-condensed">
+        <thead>
+          <tr>
+            <td class="text-center table-head">Volts (V)</td>
+            <td class="text-center table-head">Current (A)</td>
+          </tr>
+        </thead>
+        <tr ng-repeat="post in postData">
+          <td>
+            <span>{{ post.volt | round2dp }}</span>
+          </td>
+          <td>
+            <span>{{ post.current | exp }}</span>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div><!-- /div.raw-data -->
+  <div class="cover-bar"></div>
+  </div>
+
+</div>

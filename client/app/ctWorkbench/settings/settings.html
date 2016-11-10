@@ -1,0 +1,127 @@
+<header></header>
+
+<!-- settings -->
+<div class="settings tab-pane col-md-12" id="settings">
+
+  <h2>Settings</h2>
+
+  <!-- account info -->
+  <div class="account-info col-md-4">
+
+    <div class="center col-sm-offset-4">
+      <h4>Account Information</h4>
+    </div>
+
+    <form class="form-horizontal">
+
+      <div class="form-group">
+        <label for="name" class="col-sm-4 control-label">Name</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="name" placeholder="Full Name" value="Amjad Hussain" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="organization" class="col-sm-4 control-label">Organization</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="organization" placeholder="Company Name" value="iT2 Technologies Inc." />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="col-sm-4 control-label">Email</label>
+        <div class="col-sm-8">
+          <input type="email" class="form-control" id="email" placeholder="Email Address" value="amjad@esdit2.com" />
+        </div>
+      </div>
+
+      <div class="center col-sm-offset-4">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+
+    </form>
+
+  </div><!-- /div.account-info -->
+
+  <!-- change password -->
+  <div class="change-password col-md-4">
+
+    <div class="center col-sm-offset-4">
+      <h4>Change Password</h4>
+    </div>
+
+    <form class="form-horizontal">
+
+      <div class="form-group">
+        <label for="password_current" class="col-sm-4 control-label">Current Password</label>
+        <div class="col-sm-8">
+          <input type="password" class="form-control" id="password_current" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password_new" class="col-sm-4 control-label">New Password</label>
+        <div class="col-sm-8">
+          <input type="password" class="form-control" id="password_new" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password_new_confirm" class="col-sm-4 control-label confirm-password-label">Confirm Password</label>
+        <div class="col-sm-8">
+          <input type="password" class="form-control" id="password_new_confirm" />
+        </div>
+      </div>
+
+      <div class="center col-sm-offset-4">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+
+    </form>
+
+  </div><!-- /div.change-password -->
+
+  <!-- analysis criteria -->
+  <div class="analysis-criteria col-md-4">
+
+    <div class="center col-sm-offset-4">
+      <h4>Analysis Criteria</h4>
+    </div>
+
+    <form class="form-horizontal">
+
+      <div class="form-group">
+        <label for="name" class="col-sm-4 control-label">Failure Threshold</label>
+        <div class="col-sm-8">
+          <div class="input-group failure-threshold min">
+            <div class="input-group-addon">Min</div>
+            <input type="text" class="form-control" id="minShift" value="30" required />
+            <div class="input-group-addon">%</div>
+          </div>
+          <div class="input-group failure-threshold">
+            <div class="input-group-addon">Max</div>
+            <input type="text" class="form-control" id="maxShift" value="30" required />
+            <div class="input-group-addon">%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="organization" class="col-sm-4 control-label">Noise Floor</label>
+        <div class="col-sm-8">
+          <div class="input-group">
+            <input type="text" class="form-control" id="maxShift" value="50e-9" />
+            <div class="input-group-addon">A</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="center col-sm-offset-4">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+
+    </form>
+
+  </div><!-- /div.analysis-criteria -->
+
+</div><!-- /div.settings -->

@@ -1,0 +1,230 @@
+<nav class="navbar navbar-default" ng-controller="HeaderCtrl">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="" ui-sref="projects">
+        <img class="img-responsive img-logo" src="../../assets/images/it2-logo.svg" />
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      
+      <!-- nav -->
+      <div class="breadcrumb-nav nav navbar-nav">
+       <span ui-sref="projects({project: context.project.id})">Projects</span>
+       <i class="breadcrumb-next fa fa-chevron-right"></i>
+       <span ui-sref="tests({project: context.project.id, test: context.test.id})">Tests</span>
+       <i class="breadcrumb-next fa fa-chevron-right"></i>
+       <span class="active" ui-sref="results({test: context.test.id, unit: unit })">Results</span>
+     </div>
+
+      <ul class="nav navbar-nav navbar-right">
+        <!--
+        <li><a href="#submit"><i class='fa fa-plus-circle'></i> Submit Project</a></li>
+        <li><a href="#singleIVanalysis" class="go-to-singleIvAnalysis" data-toggle="tab">Single IV Analysis</a></li>
+        -->
+        <li class="dropdown" uib-dropdown on-toggle="toggled(open)">
+          <a href="" uib-dropdown-toggle>Account <span class="caret"></span></a>
+          <ul uib-dropdown-menu>
+            <!--
+            <li><a href="#settings" class="go-to-settings" data-toggle="tab">Settings</a></li>
+            <li role="separator" class="divider"></li>
+            -->
+            <li><a href=""><i class="fa fa-user"></i> {{userName}}</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="" ng-click="logout();">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+ <div class="container-fluid results hide" ng-class="{'show': results && packageMap}">
+   
+  <div class="header header-results col-md-3">
+    <h4>{{context.project.description}}</h4>
+    <h5>Package: {{context.project.packageType}} | Stress: {{context.project.stressType}}</h5>
+  </div>
+
+  <div class="header header-results col-md-9">
+    <table class="table table-bordered table-hover table-condensed">
+      <thead>
+        <tr>
+          <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.file}}" tooltip-append-to-body="true">File</td>
+          <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.minStress}}" tooltip-append-to-body="true">Min Stress (V)</td>
+          <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.maxStress}}" tooltip-append-to-body="true">Max Stress (V)</td>
+          <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.pass}}" tooltip-append-to-body="true">Pass</td>
+          <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.fail}}" tooltip-append-to-body="true">Fail</td>
+          <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.caution}}" tooltip-append-to-body="true">Caution</td>
+          <td class="text-center table-head" tooltip-placement="bottom" uib-tooltip="{{tooltips.flag}}" tooltip-append-to-body="true">Flag</td>
+        </tr>
+      </thead>
+      <tbody>
+        <td>
+          <span>{{ context.test.description }}</span>
+        </td>
+        <td>
+          <span>{{ context.test.MinStressLevel }}</span>
+        </td>
+        <td>
+          <span>{{ context.test.MaxStressLevel }}</span>
+        </td>
+        <td>
+          <span>{{ context.test.PassCount }}</span>
+        </td>
+        <td>
+          <span>{{ context.test.FailCount }}</span>
+        </td>
+        <td>
+          <span>{{ context.test.CautionCount }}</span>
+        </td>
+        <td>
+          <span>{{ context.test.FlaggedCount }}</span>
+        </td>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- pin map -->
+  <div class="pin-map col-md-6 hide" ng-class="{'show': results}">
+
+    <h3 class="center">Pin Map</h3>
+
+    <!-- legend -->
+    <div class="results-legend pin-map-legend center">
+      <div class="legend-item">
+        <div class="legend-color pass"></div>
+        <span class="legend-label pass">Pass</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color fail"></div>
+        <span class="legend-label fail">Fail</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color caution"></div>
+        <span class="legend-label caution">Caution</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color flagged"></div>
+        <span class="legend-label flagged">Flagged</span>
+      </div>
+    </div>
+    
+    <!-- tabs -->
+    <div class="tabs">
+      <span class="unit btn btn-default {{v.display}}" ng-repeat="(k,v) in units" ui-sref="results({test: test, unit: k})" ng-class="{'active': k == unit}">{{v.display}}</span>
+    </div>
+
+    <div class="clearfix"></div>
+    
+    <!-- label: x -->
+    <div class="pins-top">
+      <span class="x-label pins-label-top">Pins</span>
+      <div class="pins pins-numbers-top">
+        <span class="pin-number" ng-repeat="(k,v) in pins">{{k}}</span>
+      </div>
+    </div>
+    
+    <!-- label: y -->
+    <span class="y-label">Stress Level (V)</span>
+
+    <!-- table -->
+    <div class="results-table">
+      <!-- row -->
+      <div class="result-row {{v.$key}}" ng-repeat="(k,v) in results | toArray | orderBy:'-$key'" ng-class="{'voltage-level-active': v.$key == activeVoltageLevel}">
+        <!-- y -->
+        <span class="stress-level voltage">{{v.$key}}</span>
+        <!-- data -->
+        <div class="stress-results">
+          <span class="stress-result {{v1.valueString}}" ng-class="{'stress-result-space': v1.valueString == '', 'stress-result-active': activePin == k1 && activeVoltage == v.$key }" ng-repeat="(k1,v1) in v" ui-sref="details({test: context.test.id, unit: 0, pin: k1, voltage: v.$key})" tooltip-placement="bottom" uib-tooltip-html="'Pin {{k1}}<br><span class=\'tooltip-pin-type {{v1.description}}\'>{{v1.description}}</span>'" tooltip-append-to-body="true"></span>
+        </div>
+        <!-- x -->
+        <div class="pins pins-numbers-bottom" ng-if="$last">
+          <span class="pin-number" ng-repeat="(k1,v1) in v">{{k1}}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- label: x -->
+    <span class="x-label pins-label-bottom">Pins</span>
+
+  </div><!-- /div.pin-map -->
+
+  <!-- package map -->
+  <div class="package-map col-md-6 disable-user-select hide" ng-class="{'show':packageMap}">
+
+    <h3 class="center">Package Map</h3>
+
+    <!-- legend -->
+    <div class="results-legend package-map-legend center">
+      <div class="legend-item">
+        <div class="legend-color pass"></div>
+        <span class="legend-label pass">Pass</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color fail"></div>
+        <span class="legend-label fail">Fail</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color caution"></div>
+        <span class="legend-label caution">Caution</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color flagged"></div>
+        <span class="legend-label flagged">Flagged</span>
+      </div>
+      <br />
+      <div class="legend-item">
+        <div class="legend-color pf"></div>
+        <span class="legend-label pf">Prev Tested</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color untested"></div>
+        <span class="legend-label untested">Untested</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color noconnect"></div>
+        <span class="legend-label noconnect">No Connect</span>
+      </div>
+    </div>
+    
+    
+    <!-- carousel -->
+    <div uib-carousel carousel-controls on-carousel-change="onSlideChanged(nextSlide, direction)" active="active" no-transition="true" class="carousel carousel-package-map">
+      <div uib-slide index="$index" ng-repeat="(k,v) in packageMap | toArray:true | orderBy:'$key'" class="item {{v.$key}}" ng-class="{'package-highlight' : unit > 0, 'initial-slide': $index == active }" data-voltage-level="{{v.$key}}">
+        
+        <!-- stress level -->
+        <!--
+        <div class="carousel-title-nav center">
+          <span class="voltage-level">{{v.$key}} V</span>
+        </div>
+        -->
+
+        <!-- stress level -->
+        <div class="carousel-title-nav center">
+          <span class="left glyphicon glyphicon-chevron-left" ng-click="goPrev()"></span>
+          <span class="voltage-level">{{v.$key}} V</span>
+          <span class="right glyphicon glyphicon-chevron-right" ng-click="goNext()"></span>
+        </div>
+        
+        <div class="package sample-k1" ng-repeat="(k1,v1) in v.samples" ng-class="[{1: 'col-md-6', 2: 'col-md-12'}[pinMapResponsive(v.samples)], {'highlighted': unit == k1}]" ui-sref="results({test: test, unit: k1})">
+          <img class="package-image img-responsive" ng-src="{{v1.url}}" />
+        </div><!-- /package -->
+        
+      </div><!-- /slide -->
+    </div><!-- /carousel -->
+    
+  
+
+  </div><!-- /div.package-map -->
+
+</div>
