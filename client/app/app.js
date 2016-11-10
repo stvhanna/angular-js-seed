@@ -7,7 +7,12 @@ angular.module('angularJsSeedApp', [
   'ngResource',
   'ngSanitize',
   'ui.router',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'ngMessages',
+  'ngMaterial',
+  'angularMoment',
+  'angular-loading-bar',
+  'ngDroplet'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
